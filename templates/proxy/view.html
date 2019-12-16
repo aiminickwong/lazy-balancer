@@ -4,8 +4,10 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="proxy_status_title">节点 HTTP 服务状态</h4><small id="proxy_status_mtitle"></small>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="proxy_status_title">节点 HTTP 服务状态</h4><small
+                    id="proxy_status_mtitle"></small>
             </div>
             <div class="modal-body">
                 <table class="table table-striped" style="margin-bottom:0px">
@@ -29,11 +31,34 @@
     </div>
 </div>
 
+<div class="modal fade" id="ssl_cert_status" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ssl_cert_status_title">SSL 证书状态</h4><small
+                        id="ssl_cert_status_mtitle"></small>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped" style="margin-bottom:0px">
+                        <tbody id="div_ssl_cert_status_body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <div class="modal fade" id="proxy_logs" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="proxy_logs_title">负载均衡器日志</h4><small id="proxy_logs_mtitle"></small>
             </div>
             <div class="modal-body">
@@ -63,14 +88,17 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="edit_balancer_title"></h4><small id="edit_balancer_mtitle"></small>
             </div>
             <div class="modal-body">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab_base_config" data-toggle="tab" id="a_default_conf">基础配置</a></li>
-                        <li><a href="#tab_ssl_config" data-toggle="tab">证书配置</a></li>
+                        <li class="active"><a href="#tab_base_config" data-toggle="tab" id="a_default_conf">基础配置</a>
+                        </li>
+                        <li><a href="#tab_ssl_config" data-toggle="tab">SSL 配置</a></li>
+                        <li><a href="#tab_custom_config" data-toggle="tab">自定义配置</a></li>
                         <li><a href="#tab_proxy_config" data-toggle="tab">节点配置</a></li>
                     </ul>
                     <div class="tab-content">
@@ -80,49 +108,62 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">名称</label>
                                     <div class="col-sm-9" id="div_proxy_name">
-                                        <input type="text" class="form-control" name="proxy_proxy_name" id="input_proxy_proxy_name" placeholder="用于描述负载均衡器" onblur="check_form(this)">
+                                        <input type="text" class="form-control" name="proxy_proxy_name"
+                                            id="input_proxy_proxy_name" placeholder="用于描述负载均衡器"
+                                            onblur="check_form(this)">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">服务端口</label>
-                                    <div class="col-sm-9" id="div_listen">
-                                        <input type="text" class="form-control" name="proxy_listen" id="input_proxy_listen" placeholder="负载均衡器对外提供服务的监听端口" onblur="check_form(this)" data-inputmask="'mask':'[9]{1,5}'" data-mask>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">访问域名</label>
-                                    <div class="col-sm-9" id="div_server_name">
-                                        <input type="text" class="form-control" name="proxy_server_name" id="input_proxy_server_name" placeholder="用于配置访问负载均衡器的域名（空格分隔）" onblur="check_form(this)">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">* 访问日志</label>
+                                    <label class="col-sm-2 control-label">协议类型</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="proxy_access_log" id="input_proxy_access_log" placeholder="此负载均衡器请求日志路径">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">* 错误日志</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="proxy_error_log" id="input_proxy_error_log" placeholder="此负载均衡错误日志路径">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">* IP_HASH</label>
-                                    <div class="col-sm-9">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="proxy_ip_hash" id="check_proxy_ip_hash"> 启用根据源地址引导流量
+                                        <div class="radio">
+                                            <label class="col-sm-2">
+                                                <input type="radio" name="proxy_protocol" id="radio_protocol_http"
+                                                    value="http" onclick="change_proxy_protocol('http')"> HTTP
+                                            </label>
+                                            <label class="col-sm-2">
+                                                <input type="radio" name="proxy_protocol" id="radio_protocol_tcp"
+                                                    value="tcp" onclick="change_proxy_protocol('tcp')"> TCP
                                             </label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">* HTTP 检测</label>
+                                    <label class="col-sm-2 control-label">服务端口</label>
+                                    <div class="col-sm-9" id="div_listen">
+                                        <input type="text" class="form-control" name="proxy_listen"
+                                            id="input_proxy_listen" placeholder="负载均衡器对外提供服务的监听端口，8000 为保留端口"
+                                            onblur="check_form(this)" data-inputmask="'mask':'[9]{1,5}'" data-mask>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">* 访问域名</label>
+                                    <div class="col-sm-9" id="div_server_name">
+                                        <input type="text" class="form-control" name="proxy_server_name"
+                                            id="input_proxy_server_name" placeholder="用于配置访问负载均衡器的域名（空格分隔）">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">* 访问日志</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="proxy_access_log"
+                                            id="input_proxy_access_log" placeholder="此负载均衡器请求日志路径">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">* 错误日志</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="proxy_error_log"
+                                            id="input_proxy_error_log" placeholder="此负载均衡错误日志路径">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">* GZip 压缩</label>
                                     <div class="col-sm-9">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="proxy_http_check" id="check_proxy_http_check" onchange="check_form(this)"> 启用节点 HTTP 状态检测
+                                                <input type="checkbox" name="proxy_gzip" id="check_proxy_gzip"
+                                                    onchange=""> 启用
                                             </label>
                                         </div>
                                     </div>
@@ -130,7 +171,8 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">* 描述</label>
                                     <div class="col-sm-9">
-                                        <textarea class="form-control" rows="4" name="proxy_description" id="input_proxy_description" placeholder="此负载均衡详细描述"></textarea>
+                                        <textarea class="form-control" rows="4" name="proxy_description"
+                                            id="input_proxy_description" placeholder="此负载均衡详细描述"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -145,11 +187,23 @@
                         <div class="tab-pane" id="tab_ssl_config">
                             <form class="form-horizontal" id="form_ssl_config">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">证书状态</label>
+                                    <label class="col-sm-2 control-label">SSL 状态</label>
                                     <div class="col-sm-9">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="ssl_status" id="check_ssl_status" onchange="check_balancer_ssl(this)"> 启用
+                                                <input type="checkbox" name="ssl_status" id="check_ssl_status"
+                                                    onchange="check_balancer_ssl()"> 启用
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">HTTP/2</label>
+                                    <div class="col-sm-9">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="ssl_http2" id="check_ssl_http2"
+                                                    onchange=""> 启用
                                             </label>
                                         </div>
                                     </div>
@@ -165,15 +219,31 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-sm-2 control-label">HTTP 跳转</label>
+                                    <div class="col-sm-9">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="ssl_redirect_https" id="check_ssl_redirect_https" onchange="check_form(this)"> 启用<small>（HTTP/80 => HTTPS/443）</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-sm-2 control-label">证书</label>
                                     <div id="div_ssl_cert_body" class="col-sm-9">
-                                        <textarea class="form-control" rows="8" name="ssl_cert_body" id="txt_ssl_cert_body" placeholder="请粘贴证书文件（.crt）正文" onblur="check_form(this)" style="font-family:monospace;font-size:initial"></textarea>
+                                        <textarea class="form-control" rows="10" name="ssl_cert_body"
+                                            id="txt_ssl_cert_body" placeholder="请粘贴证书文件（.crt）正文"
+                                            onblur="check_form(this)"
+                                            style="font-family:monospace;font-size:initial"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">私钥</label>
                                     <div id="div_ssl_key_body" class="col-sm-9">
-                                        <textarea class="form-control" rows="8" name="ssl_key_body" id="txt_ssl_key_body" placeholder="请粘贴私钥文件（.key）正文" onblur="check_form(this)" style="font-family:monospace;font-size:initial"></textarea>
+                                        <textarea class="form-control" rows="10" name="ssl_key_body"
+                                            id="txt_ssl_key_body" placeholder="请粘贴私钥文件（.key）正文"
+                                            onblur="check_form(this)"
+                                            style="font-family:monospace;font-size:initial"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -186,23 +256,106 @@
 
                             </form>
                         </div>
-                        <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_proxy_config">
-                            <form class="form-horizontal" id="form_ssl_config">
+                        <div class="tab-pane" id="tab_custom_config">
+                            <form class="form-horizontal" id="form_custom_config">
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <a class="btn btn-primary btn-xs" href="#" onclick="edit_upstream(1,null)"><i class="fa fa-plus"> 增加节点</i></a>
+                                        <div id="div_custom_config_body" class="" style="height:450px;width:100%">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <span class="control-label pull-right">
+                                            <small>虚拟主机用户自定义配置，如 Location 配置等</small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_proxy_config">
+                            <form class="form-horizontal" id="form_upstram_config">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">* IP_HASH</label>
+                                    <div class="col-sm-9">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="upstream_ip_hash" id="check_upstream_ip_hash">
+                                                启用根据源地址引导流量
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">* HTTP 检测</label>
+                                    <div class="col-sm-9">
+                                        <div class="checkbox">
+                                            <p>
+                                                <label>
+                                                    <input type="checkbox" name="upstream_http_check"
+                                                        id="check_upstream_http_check" onchange="check_form(this)"> 启用节点
+                                                    HTTP 状态检测
+                                                </label>
+                                            </p>
+
+                                            <p> <label>
+                                                    <input type="checkbox" id="check_upstream_backend_protocol"> 设置后端协议为
+                                                    HTTPS
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">* 后端域名</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <input type="checkbox" data-enpassusermodified="yes"
+                                                    name="upstream_backend_domain_toggle" id="check_backend_domain_toggle"
+                                                    onchange="check_form(this)">
+                                            </span>
+                                            <input type="text" class="form-control" name="upstream_backend_domain"
+                                            id="input_upstream_backend_domain" placeholder="请输入域名，如 www.123.com">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">* 重试次数</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                        <input type="text" class="form-control"
+                                            id="input_upstream_max_fails" placeholder="用于配置后端节点失败重试阈值" name="upstream_max_fails" data-inputmask="'mask':'[9]{1,2}'" data-mask>
+                                            <span class="input-group-addon">次</span>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">* 超时时间</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                        <input type="text" class="form-control" 
+                                            id="input_upstream_fail_timeout" placeholder="用于配置后端节点超时失败阈值" name="upstream_fail_timeout" data-inputmask="'mask':'[9]{1,2}'" data-mask>
+                                            <span class="input-group-addon">秒</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="pull-left control-label col-sm-1">
+                                        <a class="btn btn-primary btn-sm" onclick="edit_upstream(1,null)"
+                                            id="a_add_upstream"><i class="fa fa-plus"> 增加节点</i></a>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-12">
                                         <table class="table table-bordered" style="margin-bottom:0px">
                                             <tr>
-                                                <td class="col-sm-3">地址</td>
-                                                <td class="col-sm-2">端口</td>
-                                                <td class="col-sm-2">权重</td>
-                                                <td class="col-sm-2">重试</td>
-                                                <td class="col-sm-2">超时</td>
+                                                <td class="col-sm-5">地址</td>
+                                                <td class="col-sm-3">端口</td>
+                                                <td class="col-sm-3">权重</td>
                                                 <td></td>
                                             </tr>
                                         </table>
@@ -236,10 +389,12 @@
         <div class="box box-primary">
             <div class="box-header with-border">
                 <button type="button" class="btn btn-primary pull-left" onclick="edit_balancer(1)">创建负载均衡器</button>
-                <div class="input-group pull-right" style="width: 250px;">
-                    <input type="text" name="proxy_filter" id="input_proxy_filter" class="form-control pull-right" placeholder="请输入名称或域名" onkeydown='if(event.keyCode==13){proxy_filter()}'>
+                <div class="input-group pull-right" style="width: 300px;">
+                    <input type="text" name="proxy_filter" id="input_proxy_filter" class="form-control pull-right"
+                        placeholder="请输入名称/域名/配置ID/端口" onkeydown='if(event.keyCode==13){proxy_filter()}'>
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" onclick="proxy_filter()"><i class="fa fa-search"></i></button>
+                        <button type="button" class="btn btn-default" onclick="proxy_filter()"><i
+                                class="fa fa-search"></i></button>
                     </div>
                 </div>
             </div>
@@ -261,39 +416,61 @@
                         {% for server in proxy %}
                         <tr>
                             <td class="col-sm-3">
-                                <button type="button" class="btn btn-default btn-xs col-sm-10" onclick="edit_balancer(0,'{{ server.config_id }}')">{{ server.proxy_name }}</button>
+                                <button type="button" class="btn btn-default btn-xs col-sm-10"
+                                    onclick="edit_balancer(0,'{{ server.config_id }}')">{{ server.proxy_name }}</button>
                             </td>
-                            {% if server.protocols %}
+                            {% if server.protocol and server.ssl %}
                             <td>
-                                <button class="btn btn-warning btn-xs" disabled>HTTPS</button>
+                                {% if server.status %}
+                                <button class="btn btn-xs" title="{{ server.pk }}" name="proxy_protocol_https" onclick="get_cert_info('{{ server.pk }}', true)">HTTPS</button>
+                                {% else %}
+                                <button class="btn btn-primary btn-xs" title="{{ server.pk }}" disabled>HTTPS</button>
+                                {% endif %}
+                            </td>
+                            {% elif server.protocol and not server.ssl %}
+                            <td>
+                                <button class="btn btn-primary btn-xs" disabled>HTTP</button>
                             </td>
                             {% else %}
                             <td>
-                                <button class="btn btn-primary btn-xs" disabled>HTTP</button>
+                                <button class="btn btn-primary btn-xs" disabled>TCP</button>
                             </td>
                             {% endif %}
                             <td>{{ server.listen }}</td>
                             {% if server.status %}
                             <td>
-                                <button type="button" class="btn btn-success btn-xs" onclick="change_status('{{ server.pk }}',0)">启用</button>
+                                <button type="button" class="btn btn-success btn-xs"
+                                    onclick="change_status('{{ server.pk }}',0)">启用</button>
                             </td>
                             {% else %}
                             <td>
-                                <button type="button" class="btn btn-danger btn-xs" onclick="change_status('{{ server.pk }}',1)">禁用</button>
+                                <button type="button" class="btn btn-danger btn-xs"
+                                    onclick="change_status('{{ server.pk }}',1)">禁用</button>
                             </td>
-                            {% endif %} {% if server.check_type == "tcp" %}
+                            {% endif %} {% if server.protocol and server.http_check and not server.to_domain_toggle %}
                             <td>
-                                <button type="button" class="btn btn-warning btn-xs" disabled>TCP</button>
+                                <button type="button" title="{{ server.config_id }}" name="proxy_upstream_status" class="btn btn-xs"
+                                    onclick="proxy_status('{{ server.pk }}',0)">HTTP</button>
+                            </td>
+                            {% elif server.protocol and not server.http_check and not server.to_domain_toggle %}
+                            <td>
+                                <button type="button" title="{{ server.config_id }}" name="proxy_upstream_status" class="btn btn-xs" onclick="proxy_status('{{ server.pk }}',0)">TCP</button>
+                            </td>
+                            {% elif not server.protocol %}
+                            <td>
+                                <button type="button" class="btn btn-primary btn-xs" disabled>TCP</button>
                             </td>
                             {% else %}
                             <td>
-                                <button type="button" class="btn btn-primary btn-xs" onclick="proxy_status('{{ server.pk }}',0)">HTTP</button>
+                                <button type="button" class="btn btn-primary btn-xs" disabled>None</button>
                             </td>
                             {% endif %}
                             <td>{{ server.update_time | timestamp_to_date }}</td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-xs" onclick="get_proxy_logs('{{ server.pk }}')">日志</button>
-                                <button type="button" class="btn btn-danger btn-xs" onclick="delete_proxy('{{ server.pk }}','{{ server.proxy_name }}')">删除</button>
+                                <button type="button" class="btn btn-primary btn-xs"
+                                    onclick="get_proxy_logs('{{ server.pk }}')">日志</button>
+                                <button type="button" class="btn btn-danger btn-xs"
+                                    onclick="delete_proxy('{{ server.pk }}','{{ server.proxy_name }}')">删除</button>
                             </td>
                         </tr>
                         {% endfor %}
@@ -304,13 +481,21 @@
             <div class="box-footer clearfix">
                 <ul class="pagination pagination-sm no-margin pull-right">
                     {% if proxy.has_previous %}
-                    <li><a href="?page={{ proxy.previous_page_number }}&filter={{ filter }}" class="prev">{{ previous_link_decorator|safe }}上一页</a></li>
+                    <li><a href="?page=1&filter={{ filter }}"
+                            class="next">首页{{ next_link_decorator|safe }}</a></li>
+                    <li><a href="?page={{ proxy.previous_page_number }}&filter={{ filter }}"
+                            class="prev">{{ previous_link_decorator|safe }}上一页</a></li>
                     {% else %}
-                    <li class="paginate_button previous disabled"><span class="disabled prev">{{ previous_link_decorator|safe }}上一页</span></li>
+                    <li class="paginate_button previous disabled"><span
+                            class="disabled prev">{{ previous_link_decorator|safe }}上一页</span></li>
                     {% endif %} {% if proxy.has_next %}
-                    <li><a href="?page={{ proxy.next_page_number }}&filter={{ filter }}" class="next">下一页{{ next_link_decorator|safe }}</a></li>
+                    <li><a href="?page={{ proxy.next_page_number }}&filter={{ filter }}"
+                            class="next">下一页{{ next_link_decorator|safe }}</a></li>
+                    <li><a href="?page={{ proxy.paginator.num_pages }}&filter={{ filter }}"
+                            class="next">尾页{{ next_link_decorator|safe }}</a></li>
                     {% else %}
-                    <li class="paginate_button next disabled"><span class="disabled next">下一页{{ next_link_decorator|safe }}</span></li>
+                    <li class="paginate_button next disabled"><span
+                            class="disabled next">下一页{{ next_link_decorator|safe }}</span></li>
                     {% endif %}
                     <li class="paginate_button previous disabled">
                         <span>第 {{ proxy.number }} 页 - 共 {{ proxy.paginator.num_pages }} 页</span>
@@ -321,393 +506,629 @@
     </div>
 </div>
 <script>
-$('#menu_proxy_config').addClass('active')
-$('#page_header').text('负载均衡配置')
-$('#page_header_descript').text('用于管理 Nginx 虚拟主机相关配置')
-$('#page_nav').text('服务管理')
-$('#page_name').text('负载均衡配置')
+    $('#menu_proxy_config').addClass('active')
+    $('#page_header').text('负载均衡配置')
+    $('#page_header_descript').text('用于管理 Nginx 虚拟主机相关配置')
+    $('#page_nav').text('服务管理')
+    $('#page_name').text('负载均衡配置')
 
-function check_form(input) {
-    if ($(input).attr('name') == 'proxy_http_check') {
-        if ($(input).prop('checked') == true) {
-            alert('您选择了使用 HTTP 方式检测后端节点，这种方式将视所有状态码为非 2XX 以及 3XX 的节点为不可用，有可能造成访问异常以及效率下降，若有以上问题请修改配置！')
-        }
-        return
-    }
-    var input_div = $(input.closest("div"))
-    input_div.removeClass('has-error')
-    input_div.removeClass('has-success')
-    if (($(input).val() == "") || ($(input).attr('name') == "proxy_listen" && !$(input).val().indexOf("8000"))) {
-        input_div.addClass('has-error')
-    } else {
-        input_div.addClass('has-success')
-    }
-}
+    var editor = ace.edit('div_custom_config_body');
+    var status_t;
+    var log_t;
 
-function check_balancer_ssl(self) {
-    if ($(self)[0].checked == true) {
-        $('#txt_ssl_cert_body').removeAttr('disabled')
-        $('#txt_ssl_key_body').removeAttr('disabled')
-        $('#check_ssl_port').removeAttr('disabled')
-        $('#div_ssl_cert_body').removeClass('has-success')
-        $('#div_ssl_key_body').removeClass('has-success')
-    } else {
-        $('#txt_ssl_cert_body').text('')
-        $('#txt_ssl_key_body').text('')
-        $('#check_ssl_port').prop('checked', false)
-        $('#check_ssl_port').attr('disabled', 'disabled')
-        $('#txt_ssl_cert_body').attr('disabled', 'disabled')
-        $('#txt_ssl_key_body').attr('disabled', 'disabled')
-    }
-}
+    $(document).ready(function(){
+        editor.setTheme("ace/theme/monokai");
+        editor.getSession().setMode("ace/mode/nginx");
+        editor.setShowPrintMargin(false);
+        editor.setValue('')
 
-function edit_upstream(add, upstream) {
-    if (add == 1) {
-        if (upstream == null) {
-            upstream = {
-                address: null,
-                port: null,
-                weight: null,
-                max_fails: null,
-                fail_timeout: null
-            }
-        }
-
-        tb = '<form class="form-horizontal"><table class="table table-bordered" style="margin-bottom:0px"><tr>'
-        tb += '<td class="col-sm-3"><div><input type="text" onblur="check_form(this)" class="form-control" name="upstream_address" placeholder="IP地址" data-inputmask="\'alias\': \'ip\'" data-mask value="' + upstream.address + '"></div></td>'
-        tb += '<td class="col-sm-2"><div><input type="text" onblur="check_form(this)" class="form-control" name="upstream_port" placeholder="服务端口" data-inputmask="\'mask\':\'[9]{1,5}\'" data-mask value="' + upstream.port + '"></div></td>'
-        tb += '<td class="col-sm-2"><input type="text" class="form-control" name="upstream_weight" placeholder="*权重(1-100)" data-inputmask="\'mask\':\'[9]{1,3}\'" data-mask value="' + upstream.weight + '"></td>'
-        tb += '<td  class="col-sm-2"><input type="text" class="form-control" name="upstream_max_fails" placeholder="*重试次数(1-99)"data-inputmask="\'mask\':\'[9]{1,2}\'" data-mask value="' + upstream.max_fails + '"></td>'
-        tb += '<td class="col-sm-2"><input type="text" class="form-control" name="upstream_fail_timeout" placeholder="*超时时间(秒)" data-inputmask="\'mask\':\'[9]{1,2}\'" data-mask value="' + upstream.fail_timeout + '"></td>'
-        tb += '<td><a href="#" onclick="edit_upstream(0,this)"><h5><i class="fa fa-remove"></i></h5></a></td>'
-        tb += '</tr></table></form>'
-        $('#div_upstream_list').append(tb)
-        $("[data-mask]").inputmask()
-    } else {
-        $(upstream).parents('form')[0].remove()
-    }
-}
-
-
-function edit_balancer(create, config_id) {
-    $('#a_default_conf').trigger('click')
-    if (create == 1) {
-        $('#edit_balancer_title').text('创建负载均衡器')
-        $('#edit_balancer_mtitle').text('')
-        $('#input_proxy_config_id').val('0')
-        $('#input_proxy_proxy_name').val('')
-        $('#input_proxy_listen').val('')
-        $('#input_proxy_server_name').val('')
-        $('#input_proxy_access_log').val('')
-        $('#input_proxy_error_log').val('')
-        $('#check_proxy_ip_hash').attr('checked', false)
-        $('#check_proxy_http_check').attr('checked', false)
-        $('#div_upstream_list').empty()
-        $("[data-mask]").inputmask()
-        $('#edit_balancer').modal('show')
-    } else {
-        var post = {
-            config_id: config_id
-        }
-        jQuery.ajax({
-            type: 'post',
-            url: '/proxy/query/',
-            data: JSON.stringify(post),
-            dataType: "json",
-            success: function(p) {
-                if (p.flag == "Success") {
-                    $('#edit_balancer_title').text('编辑负载均衡器')
-                    $('#edit_balancer_mtitle').text(config_id)
-                    $('#input_proxy_config_id').val(config_id)
-                    $('#div_upstream_list').empty()
-
-                    $('#input_proxy_proxy_name').val(p.context.proxy.proxy_name)
-                    $('#input_proxy_listen').val(p.context.proxy.listen)
-                    $('#input_proxy_server_name').val(p.context.proxy.server_name)
-                    $('#input_proxy_access_log').val(p.context.proxy.access_log)
-                    $('#input_proxy_error_log').val(p.context.proxy.error_log)
-                    $('#input_proxy_description').text(p.context.proxy.description)
-                    if (p.context.proxy.balancer_type == "ip_hash") {
-                        $('#check_proxy_ip_hash').prop('checked', true)
-                    } else {
-                        $('#check_proxy_ip_hash').prop('checked', false)
-                    }
-                    if (p.context.proxy.check_type == "http") {
-                        $('#check_proxy_http_check').prop('checked', true)
-                    } else {
-                        $('#check_proxy_http_check').prop('checked', false)
-                    }
-                    for (var f in p.context.upstream) {
-                        edit_upstream(1, p.context.upstream[f])
-                    }
-                    if (p.context.proxy.protocols == true) {
-                        $('#check_ssl_status').prop('checked', true)
-                        $('#txt_ssl_cert_body').text(p.context.proxy.ssl_cert)
-                        $('#txt_ssl_key_body').text(p.context.proxy.ssl_key)
-                    } else {
-                        $('#check_ssl_status').prop('checked', false)
-                    }
-                    if (p.context.proxy.listen == 443) {
-                        $('#check_ssl_port').prop('checked', false)
-                    } else {
-                        $('#check_ssl_port').prop('checked', true)
-                    }
-                    check_balancer_ssl($('#check_ssl_status'))
-                    $('#edit_balancer').modal('show')
-                } else if (p.flag == "Error" && p.context == "AuthFailed") {
-                    alert('认证失败！请重新登录！')
-                    top.location = '/login/'
-                } else {
-                    alert('查询失败！' + p.context)
-                }
-            },
-            error: function(e) {
-                alert('请求失败!')
+        $(':button[name="proxy_protocol_https"]').each(function (){
+            cert_info = get_cert_info($(this)[0].title, false)
+            if (cert_info.has_expired) {
+                $(this).addClass('btn-warning')
+                $(this)[0].title = '证书过期'
+            } else {
+                $(this).addClass('btn-success')
+                $(this)[0].title = '证书正常'
             }
         })
-    }
-}
 
-function delete_proxy(pk, name) {
-    if (confirm("确认删除负载均衡[" + name + "]？")) {
-        var post = {
-            pk: pk
-        }
-        jQuery.ajax({
-            type: 'post',
-            url: '/proxy/delete/',
-            data: JSON.stringify(post),
-            dataType: 'json',
-            success: function(p) {
-                if (p.flag == "Success") {
-                    alert("删除成功!")
-                    top.location = '/proxy/'
-                } else if (p.flag == "Error" && p.context == "AuthFailed") {
-                    alert('认证失败！请重新登录！')
-                    top.location = '/login/'
-                } else {
-                    alert('删除错误！' + p.context)
+        var upstream_status = proxy_status(0, 2)
+        $(':button[name="proxy_upstream_status"]').each(function (){
+            var down = 0
+            for (s in upstream_status) {
+                if (upstream_status[s].upstream == $(this)[0].title && upstream_status[s].status == "down") {
+                    down++
                 }
-            },
-            error: function(e) {
-                alert('请求失败!')
+            }
+            if (down == 0) {
+                $(this).addClass('btn-success')
+                $(this)[0].title = '后端节点正常'
+            } else {
+                $(this).addClass('btn-warning')
+                $(this)[0].title = '后端节点异常'
             }
         })
-    }
-}
-
-var t
-$(function() {
-    $('#proxy_logs').on('hide.bs.modal', function() {
-        $("#tail_access").empty()
-        $("#tail_error").empty()
-        clearTimeout(t)
     })
-});
 
-$(function() {
-    $('#proxy_status').on('hide.bs.modal', function() {
-        $("#tail_access").empty()
-        $("#tail_error").empty()
-        clearTimeout(t)
-    })
-});
-
-function proxy_status(pk, getdata) {
-    if (getdata == 1) {
-        var post = {
-            pk: pk
+    function check_form(input) {
+        if ($(input).attr('name') == 'upstream_http_check') {
+            if ($(input).prop('checked') == true) {
+                alert(
+                    '您选择了使用 HTTP 方式检测后端节点，这种方式将视所有状态码为非 2XX 以及 3XX 的节点为不可用，有可能造成访问异常以及效率下降，启用 SSL 后将使用发送 SSL Hello 包方式探测，若有以上问题请修改配置！')
+            }
+            return
         }
-        jQuery.ajax({
-            type: 'post',
-            url: '/proxy/checkhttp/',
-            data: JSON.stringify(post),
-            dataType: "json",
-            success: function(p) {
-                if (p.flag == "Success") {
-                    $('#proxy_status_mtitle').text(p.config_id)
-                    $('#div_proxy_status_list').empty()
+        if ($(input).attr('name') == 'ssl_redirect_https') {
+            if ($(input).prop('checked') == true) {
+                alert(
+                    '您启用了 HTTPS 协议自动跳转功能，该功能会将当前域名的 HTTP/80 301 重定向到 HTTPS/<当前端口>，可能造成 HTTP 协议下规则冲突。')
+            }
+            return
+        }
+        if ($(input).attr('name') == 'proxy_to_domain_toggle') {
+            if ($(input).prop('checked') == true) {
+                alert('您选择了启用直接域名代理，该方式将禁用后端节点配置功能，直接将流量转发至您指定的域名。')
+                change_to_domain(true)
+            } else {
+                change_to_domain(false)
+            }
+            return
+        }
+        if ($(input).attr('name') == 'upstream_backend_domain_toggle') {
+            if ($(input).prop('checked') == true) {
+                change_backend_domain(true)
+            } else {
+                change_backend_domain(false)
+            }
+            return
+        }
+        var input_div = $(input.closest("div"))
+        input_div.removeClass('has-error')
+        input_div.removeClass('has-success')
+        if (($(input).val() == "") || ($(input).attr('name') == "proxy_listen" && !$(input).val().indexOf("8000"))) {
+            input_div.addClass('has-error')
+        } else {
+            input_div.addClass('has-success')
+        }
+    }
 
-                    for (var f in p.status.servers.server) {
-                        var server = p.status.servers.server[f]
-                        if (server.upstream == p.config_id) {
-                            tb = '<tr>'
-                            tb += '<td>' + server.index + '</td>'
-                            tb += '<td>' + server.name + '</td>'
-                            tb += '<td>' + server.rise + '</td>'
-                            tb += '<td>' + server.fall + '</td>'
-                            if (server.status == "up") {
-                                tb += '<td><span class="label label-success">正常</span></td>'
-                            } else {
-                                tb += '<td><span class="label label-warning">异常</span></td>'
-                            }
-                            tb += '</tr>'
-                            $('#div_proxy_status_list').append(tb)
+    function change_backend_domain(type) {
+        if (type) {
+            if ($('#check_backend_domain_toggle').prop('checked')) {
+                $('#input_upstream_backend_domain').removeAttr('disabled')
+            } else {
+                $('#input_upstream_backend_domain').attr('disabled', 'disabled')
+                $('#input_upstream_backend_domain').val('')
+            }
+        } else {
+            $("#check_backend_domain_toggle").prop('checked', false)
+            $('#input_upstream_backend_domain').attr('disabled', 'disabled')
+            $('#input_upstream_backend_domain').val('')
+        }
+    }
+
+    function check_balancer_ssl() {
+        if ($('#check_ssl_status')[0].checked) {
+            $('#txt_ssl_cert_body').removeAttr('disabled')
+            $('#txt_ssl_key_body').removeAttr('disabled')
+            $('#check_ssl_port').removeAttr('disabled')
+            $('#check_ssl_http2').removeAttr('disabled')
+            $('#check_ssl_redirect_https').removeAttr('disabled')
+            $('#div_ssl_cert_body').removeClass('has-success')
+            $('#div_ssl_key_body').removeClass('has-success')
+        } else {
+            $('#txt_ssl_cert_body').val('')
+            $('#txt_ssl_key_body').val('')
+            $('#check_ssl_port').prop('checked', false)
+            $('#check_ssl_port').attr('disabled', 'disabled')
+            $('#check_ssl_http2').prop('checked', false)
+            $('#check_ssl_http2').attr('disabled', 'disabled')
+            $('#check_ssl_redirect_https').prop('checked', false)
+            $('#check_ssl_redirect_https').attr('disabled', 'disabled')
+            $('#txt_ssl_cert_body').attr('disabled', 'disabled')
+            $('#txt_ssl_key_body').attr('disabled', 'disabled')
+            $('#div_ssl_cert_body').removeClass('has-success')
+            $('#div_ssl_key_body').removeClass('has-success')
+        }
+    }
+
+    function change_proxy_protocol(type) {
+        if (type == "http") {
+            $("#radio_protocol_http").prop('checked', true)
+            $('#input_proxy_server_name').removeAttr('disabled')
+            $("#check_upstream_ip_hash").removeAttr('disabled');
+            $("#check_upstream_http_check").removeAttr('disabled');
+            $("#check_proxy_gzip").removeAttr('disabled');
+            $("#check_ssl_status").removeAttr('disabled');
+            $("#check_upstream_backend_protocol").removeAttr('disabled');
+            $("#check_proxy_to_domain_toggle").removeAttr('disabled');
+            $("#check_backend_domain_toggle").removeAttr('disabled');
+            $("#a_add_upstream").removeAttr('disabled');
+            change_backend_domain(true)
+            editor.setReadOnly(false)
+        } else {
+            $("#radio_protocol_tcp").prop('checked', true)
+            $('#input_proxy_server_name').val('')
+            $('#input_proxy_server_name').attr('disabled', 'disabled')
+            $("#check_upstream_ip_hash").prop('checked', false)
+            $("#check_upstream_ip_hash").attr('disabled', 'disabled')
+            $("#check_upstream_http_check").prop('checked', false);
+            $("#check_upstream_http_check").attr('disabled', 'disabled');
+            $("#check_proxy_gzip").prop('checked', false);
+            $("#check_proxy_gzip").attr('disabled', 'disabled');
+            $("#check_ssl_status").prop('checked', false);
+            $("#check_ssl_status").attr('disabled', 'disabled');
+            $("#check_upstream_backend_protocol").prop('checked', false);
+            $("#check_upstream_backend_protocol").attr('disabled', 'disabled');
+            $("#check_proxy_to_domain_toggle").prop('checked', false);
+            $("#check_proxy_to_domain_toggle").attr('disabled', 'disabled');
+            $("#check_backend_domain_toggle").attr('disabled', 'disabled');
+            editor.setValue('')
+            editor.setReadOnly(true)
+            change_backend_domain(false)
+            check_balancer_ssl()
+        }
+    }
+
+    function edit_upstream(add, upstream) {
+        if (add == 1) {
+            if (upstream == null) {
+                upstream = {
+                    address: "",
+                    port: "",
+                    weight: "" 
+                }
+            }
+
+            tb = '<form class="form-horizontal"><table class="table table-bordered" style="margin-bottom:0px"><tr>'
+            tb +=
+                '<td class="col-sm-5"><div><input type="text" onblur="check_form(this)" class="form-control" name="upstream_address" placeholder="IP 地址或者域名" value="' +
+                upstream.address + '"></div></td>'
+            tb +=
+                '<td class="col-sm-3"><div><input type="text" onblur="check_form(this)" class="form-control" name="upstream_port" placeholder="服务端口" data-inputmask="\'mask\':\'[9]{1,5}\'" data-mask value="' +
+                upstream.port + '"></div></td>'
+            tb +=
+                '<td class="col-sm-3"><input type="text" class="form-control" name="upstream_weight" placeholder="*权重(1-100)" data-inputmask="\'mask\':\'[9]{1,3}\'" data-mask value="' +
+                upstream.weight + '"></td>'
+            tb += '<td><a href="#" onclick="edit_upstream(0,this)"><h5><i class="fa fa-remove"></i></h5></a></td>'
+            tb += '</tr></table></form>'
+            $('#div_upstream_list').append(tb)
+            $("[data-mask]").inputmask()
+        } else {
+            if (upstream) {
+                $(upstream).parents('form')[0].remove()
+            } else {
+                $('#div_upstream_list').empty()
+            }
+        }
+    }
+
+    function edit_balancer(create, config_id) {
+        $('#a_default_conf').trigger('click')
+        $('.CodeMirror').remove()
+        if (create == 1) {
+            $('#edit_balancer_title').text('创建负载均衡器')
+            $('#edit_balancer_mtitle').text('')
+            $('#input_proxy_config_id').val('0')
+            $('#input_proxy_proxy_name').val('')
+            $('#input_proxy_listen').val('')
+            $('#input_proxy_server_name').val('')
+            $('#input_proxy_access_log').val('')
+            $('#input_proxy_error_log').val('')
+            $('#check_upstream_ip_hash').attr('checked', false)
+            $('#check_upstream_http_check').attr('checked', false)
+            $("#check_upstream_backend_protocol").prop('checked', false);
+            $('#check_ssl_status').prop('checked', false)
+            $('#input_upstream_max_fails').val('')
+            $('#input_upstream_fail_timeout').val('')
+            $('#input_upstream_backend_domain').val('')
+            $('#div_upstream_list').empty()
+            $("[data-mask]").inputmask()
+            check_balancer_ssl()
+            change_proxy_protocol('http')
+            editor.setValue('')
+            $('#edit_balancer').modal('show')
+        } else {
+            var post = {
+                config_id: config_id
+            }
+            jQuery.ajax({
+                type: 'post',
+                url: '/proxy/query/',
+                data: JSON.stringify(post),
+                dataType: "json",
+                success: function (p) {
+                    if (p.flag == "Success") {
+                        //console.log(p)
+                        $('#edit_balancer_title').text('编辑负载均衡器')
+                        $('#edit_balancer_mtitle').text(config_id)
+                        $('#input_proxy_config_id').val(config_id)
+                        $('#div_upstream_list').empty()
+                        $('#input_proxy_proxy_name').val(p.context.proxy.proxy_name)
+                        $('#input_proxy_listen').val(p.context.proxy.listen)
+                        $('#input_proxy_server_name').val(p.context.proxy.server_name)
+                        $('#input_proxy_access_log').val(p.context.proxy.access_log)
+                        $('#input_proxy_error_log').val(p.context.proxy.error_log)
+                        $('#input_proxy_description').text(p.context.proxy.description)
+                        if (p.context.proxy.balancer_type == "ip_hash") {
+                            $('#check_upstream_ip_hash').prop('checked', true)
+                        } else {
+                            $('#check_upstream_ip_hash').prop('checked', false)
                         }
+                        if (p.context.proxy.http_check) {
+                            $('#check_upstream_http_check').prop('checked', true)
+                        } else {
+                            $('#check_upstream_http_check').prop('checked', false)
+                        }
+                        if (p.context.proxy.gzip) {
+                            $('#check_proxy_gzip').prop('checked', true)
+                        } else {
+                            $('#check_proxy_gzip').prop('checked', false)
+                        }
+                        if (p.context.proxy.ssl) {
+                            $('#check_ssl_status').prop('checked', true)
+                            $('#txt_ssl_cert_body').val(p.context.proxy.ssl_cert)
+                            $('#txt_ssl_key_body').val(p.context.proxy.ssl_key)
+                            if (p.context.proxy.ssl_http2) {
+                                $('#check_ssl_http2').prop('checked', true)
+                            } else {
+                                $('#check_ssl_http2').prop('checked', false)
+                            }
+                            if (p.context.proxy.listen == 443) {
+                                $('#check_ssl_port').prop('checked', false)
+                            } else {
+                                $('#check_ssl_port').prop('checked', true)
+                            }
+                            if (p.context.proxy.ssl_redirect_https) {
+                                $('#check_ssl_redirect_https').prop('checked', true)
+                            } else {
+                                $('#check_ssl_redirect_https').prop('checked', false)
+                            }
+                        } else {
+                            $('#check_ssl_status').prop('checked', false)
+                        }
+                        editor.setValue(p.context.proxy.custom_config)
+                        if (p.context.proxy.backend_protocol == "https") {
+                            $('#check_upstream_backend_protocol').prop('checked', true)
+                        }
+                        $('#input_upstream_max_fails').val(p.context.proxy.max_fails)
+                        $('#input_upstream_fail_timeout').val(p.context.proxy.fail_timeout)
+                        // console.log(p.context.proxy)
+                        if (p.context.proxy.backend_domain_toggle) {
+                            $('#check_backend_domain_toggle').prop('checked', true)
+                            $('#input_upstream_backend_domain').val(p.context.proxy.backend_domain)
+                        }
+                        for (var f in p.context.upstream) {
+                            edit_upstream(1, p.context.upstream[f])
+                        }
+                        if (p.context.proxy.protocol) {
+                            change_proxy_protocol('http')
+                        } else {
+                            change_proxy_protocol('tcp')
+                        }
+                        check_balancer_ssl()
+                        $('#edit_balancer').modal('show')
+                    } else if (p.flag == "Error" && p.context == "AuthFailed") {
+                        alert('认证失败！请重新登录！')
+                        top.location = '/login/'
+                    } else {
+                        alert('查询失败！' + p.context)
                     }
-                    t = setTimeout(function() {
-                        proxy_status(pk, 1);
-                    }, 3000)
+                },
+                error: function (e) {
+                    alert('请求失败!')
+                }
+            })
+        }
+    }
 
+    function delete_proxy(pk, name) {
+        if (confirm("确认删除负载均衡[" + name + "]？")) {
+            var post = {
+                pk: pk
+            }
+            jQuery.ajax({
+                type: 'post',
+                url: '/proxy/delete/',
+                data: JSON.stringify(post),
+                dataType: 'json',
+                success: function (p) {
+                    if (p.flag == "Success") {
+                        alert("删除成功!")
+                        top.location = '/proxy/'
+                    } else if (p.flag == "Error" && p.context == "AuthFailed") {
+                        alert('认证失败！请重新登录！')
+                        top.location = '/login/'
+                    } else {
+                        alert('删除错误！' + p.context)
+                    }
+                },
+                error: function (e) {
+                    alert('请求失败!')
+                }
+            })
+        }
+    }
+
+    function proxy_status(pk, getdata) {
+        var post = {
+            pk: pk
+        }
+        if (getdata == 1) {
+            jQuery.ajax({
+                type: 'post',
+                url: '/proxy/checkhttp/',
+                data: JSON.stringify(post),
+                dataType: "json",
+                success: function (p) {
+                    if (p.flag == "Success") {
+                        $('#proxy_status_mtitle').text(p.config_id)
+                        $('#div_proxy_status_list').empty()
+
+                        for (var f in p.status) {
+                            var server = p.status[f]
+                            if (server.upstream == p.config_id) {
+                                tb = '<tr>'
+                                tb += '<td>' + server.index + '</td>'
+                                tb += '<td>' + server.name + '</td>'
+                                tb += '<td>' + server.rise + '</td>'
+                                tb += '<td>' + server.fall + '</td>'
+                                if (server.status == "up") {
+                                    tb += '<td><span class="label label-success">正常</span></td>'
+                                } else {
+                                    tb += '<td><span class="label label-warning">异常</span></td>'
+                                }
+                                tb += '</tr>'
+                                $('#div_proxy_status_list').append(tb)
+                            }
+                        }
+                        status_t = setTimeout(function () {
+                            proxy_status(pk, 1);
+                        }, 3000)
+
+                    } else if (p.flag == "Error" && p.context == "AuthFailed") {
+                        alert('认证失败！请重新登录！')
+                        top.location = '/login/'
+                    } else {
+                        alert('查询失败！' + p.context)
+                    }
+                },
+                error: function (e) {
+                    alert('请求失败!')
+                }
+            })
+        } else if (getdata == 2 ) {
+            var upstream_status;
+            jQuery.ajax({
+                type: 'post',
+                url: '/proxy/checkhttp/',
+                data: JSON.stringify(post),
+                async: false,
+                dataType: "json",
+                success: function (p) {
+                    if (p.flag == "Success") {
+                        upstream_status = p.status
+                    } else if (p.flag == "Error" && p.context == "AuthFailed") {
+                        alert('认证失败！请重新登录！')
+                        top.location = '/login/'
+                    } else {
+                        alert('查询失败！' + p.context)
+                    }
+                },
+                error: function (e) {
+                    alert('请求失败!')
+                }
+            })
+            return upstream_status
+        } else {
+            proxy_status(pk, 1)
+            $('#proxy_status').modal('show')
+        }
+    }
+
+
+    function tailScroll(tail) {
+        var height = tail.get(0).scrollHeight;
+        tail.animate({
+            scrollTop: height
+        }, 500);
+        if (tail.val().split("\n").length > 500) {
+            tail.empty()
+        }
+    }
+
+    function get_proxy_logs(pk, position) {
+        if (position == null) {
+            $('#a_access_log').trigger('click')
+            $("#tail_access").empty()
+            $("#tail_error").empty()
+
+            position = {
+                "access": 0,
+                "error": 0
+            }
+            get_proxy_logs(pk, position)
+
+            $('#proxy_logs').modal('show')
+        } else {
+            post = {
+                "curr_position": position,
+                "pk": pk
+            }
+            jQuery.ajax({
+                type: 'post',
+                url: '/proxy/logs/',
+                data: JSON.stringify(post),
+                dataType: 'json',
+                success: function (p) {
+                    if (p.flag == "Success") {
+                        if (p.log_body.access != "") {
+                            $('#tail_access').append(p.log_body.access)
+                            tailScroll($("#tail_access"))
+                        }
+                        if (p.log_body.error != "") {
+                            $('#tail_error').append(p.log_body.error)
+                            tailScroll($("#tail_error"))
+                        }
+
+                        log_t = setTimeout(function () {
+                            get_proxy_logs(pk, p.curr_position);
+                        }, 3000)
+
+                    } else if (p.flag == "Error") {
+                        $("#tail_access").empty()
+                        $("#tail_error").empty()
+                        alert('查询失败！错误：' + p.context)
+                    }
+
+                    if (p.flag == "Error" && p.context == "AuthFailed") {
+                        alert('认证失败！请重新登录！')
+                        top.location = '/login/'
+                    }
+                }
+            })
+        }
+    }
+
+    function change_status(pk, status) {
+        if (confirm("确认要变更状态？")) {
+            var post = {
+                pk: pk,
+                status: status
+            }
+            jQuery.ajax({
+                type: 'post',
+                url: '/proxy/status/',
+                data: JSON.stringify(post),
+                dataType: 'json',
+                success: function (p) {
+                    if (p.flag == "Success") {
+                        alert("变更成功!")
+                        top.location = '/proxy/'
+                    } else if (p.flag == "Error" && p.context == "AuthFailed") {
+                        alert('认证失败！请重新登录！')
+                        top.location = '/login/'
+                    } else {
+                        alert('变更错误！' + p.context)
+                    }
+                },
+                error: function (e) {
+                    alert('请求失败!')
+                }
+            })
+        }
+    }
+
+    function proxy_filter() {
+        window.location = '/proxy/?filter=' + $('#input_proxy_filter').val()
+    }
+
+    $(function () {
+        $('#proxy_logs').on('hide.bs.modal', function () {
+            $("#tail_access").empty()
+            $("#tail_error").empty()
+            clearTimeout(log_t)
+        })
+        $('#proxy_status').on('hide.bs.modal', function () {
+            clearTimeout(status_t)
+        })
+    });
+
+    function save_balancer() {
+        if (confirm("确认要保存这样的配置？")) {
+            var base_config = $('#form_base_config').serializeObject()
+            var upstream_config = $('#form_upstram_config').serializeObject()
+            if ($('#check_upstream_backend_protocol').prop('checked')) {
+                base_config['upstream_backend_protocol'] = "on"
+            }
+            var ssl_config = $('#form_ssl_config').serializeObject()
+            var custom_config = editor.getValue()
+            var upstream_list = []
+            $('#div_upstream_list form').each(function () {
+                upstream_list.push($(this).serializeObject())
+            })
+            var post = {
+                'base_config': Object.assign(base_config, upstream_config),
+                'ssl_config': ssl_config,
+                'upstream_list': upstream_list,
+                'custom_config': custom_config
+            }
+
+            jQuery.ajax({
+                type: 'post',
+                url: '/proxy/save/',
+                data: JSON.stringify(post),
+                dataType: 'json',
+                success: function (p) {
+                    if (p.flag == "Success") {
+                        alert("保存成功!")
+                        top.location = '/proxy/'
+                    } else if (p.flag == "Error" && p.context == "ArgsError") {
+                        alert('保存失败！配置项填写错误！')
+                    } else if (p.flag == "Error" && p.context == "MainConfigNotFound") {
+                        alert('保存失败！请先修改全局配置！')
+                    } else if (p.flag == "Error" && p.context == "AuthFailed") {
+                        alert('认证失败！请重新登录！')
+                        top.location = '/login/'
+                    } else {
+                        alert('保存错误！其他错误：' + p.context)
+                    }
+                },
+                error: function (e) {
+                    alert('请求失败!')
+                }
+            })
+        }
+
+    }
+
+    function get_cert_info(pk, type) {
+        var post = {
+            pk: pk
+        }
+        var cert_info;
+        jQuery.ajax({
+            type: 'post',
+            async: false,
+            url: '/proxy/certstatus/',
+            data: JSON.stringify(post),
+            dataType: "json",
+            success: function (p) {
+                if (p.flag == "Success") {
+                    //console.log(p)
+                    if (type) {
+                        $('#ssl_cert_status_mtitle').text(p.config_id)
+                        $('#div_ssl_cert_status_body').empty()
+                        if (p.cert_info.has_expired) {
+                            has_expired = '<span class="label label-warning">已过期</span>'
+                        } else {
+                            has_expired = '<span class="label label-success">正常</span>'
+                        }
+
+                        tb = '<tr><td><strong>证书域名</strong></td><td>' + p.cert_info.subject + '</td></tr>'
+                        tb += '<tr><td><strong>签发机构</strong></td><td>' + p.cert_info.issuer + '</td></tr>'
+                        tb += '<tr><td><strong>过期时间</strong></td><td>' + p.cert_info.datetime_struct + ' ' + has_expired + '</td></tr>'
+                        $('#div_ssl_cert_status_body').append(tb)
+
+                        $('#ssl_cert_status').modal('show')
+                    } else { 
+                        cert_info = p.cert_info
+                    }
 
                 } else if (p.flag == "Error" && p.context == "AuthFailed") {
                     alert('认证失败！请重新登录！')
                     top.location = '/login/'
                 } else {
-                    clearTimeout(t)
                     alert('查询失败！' + p.context)
                 }
             },
-            error: function(e) {
-                clearTimeout(t)
+            error: function (e) {
                 alert('请求失败!')
             }
         })
-    } else {
-        proxy_status(pk, 1)
-        $('#proxy_status').modal('show')
-    }
-}
-
-
-function tailScroll(tail) {
-    var height = tail.get(0).scrollHeight;
-    tail.animate({
-        scrollTop: height
-    }, 500);
-    if (tail.val().split("\n").length > 500) {
-        tail.empty()
-    }
-}
-
-function get_proxy_logs(pk, position) {
-    if (position == null) {
-        $('#a_access_log').trigger('click')
-        $("#tail_access").empty()
-        $("#tail_error").empty()
-
-        position = {
-            "access": 0,
-            "error": 0
-        }
-        get_proxy_logs(pk, position)
-
-        $('#proxy_logs').modal('show')
-    } else {
-        post = {
-            "curr_position": position,
-            "pk": pk
-        }
-        jQuery.ajax({
-            type: 'post',
-            url: '/proxy/logs/',
-            data: JSON.stringify(post),
-            dataType: 'json',
-            success: function(p) {
-                if (p.flag == "Success") {
-                    if (p.log_body.access != "") {
-                        $('#tail_access').append(p.log_body.access)
-                        tailScroll($("#tail_access"))
-                    }
-                    if (p.log_body.error != "") {
-                        $('#tail_error').append(p.log_body.error)
-                        tailScroll($("#tail_error"))
-                    }
-
-                    t = setTimeout(function() {
-                        get_proxy_logs(pk, p.curr_position);
-                    }, 3000)
-
-                } else if (p.flag == "Error") {
-                    $("#tail_access").empty()
-                    $("#tail_error").empty()
-                    clearTimeout(t)
-                    alert('查询失败！错误：' + p.context)
-                }
-
-                if (p.flag == "Error" && p.context == "AuthFailed") {
-                    alert('认证失败！请重新登录！')
-                    top.location = '/login/'
-                }
-            },
-        })
-    }
-}
-
-function change_status(pk, status) {
-    if (confirm("确认要变更状态？")) {
-        var post = {
-            pk: pk,
-            status: status
-        }
-        jQuery.ajax({
-            type: 'post',
-            url: '/proxy/status/',
-            data: JSON.stringify(post),
-            dataType: 'json',
-            success: function(p) {
-                if (p.flag == "Success") {
-                    alert("变更成功!")
-                    top.location = '/proxy/'
-                } else if (p.flag == "Error" && p.context == "AuthFailed") {
-                    alert('认证失败！请重新登录！')
-                    top.location = '/login/'
-                } else {
-                    alert('变更错误！' + p.context)
-                }
-            },
-            error: function(e) {
-                alert('请求失败!')
-            }
-        })
-    }
-}
-
-function proxy_filter() {
-    window.location = '/proxy/?filter=' + $('#input_proxy_filter').val()
-}
-
-
-function save_balancer() {
-    if (confirm("确认要保存这样的配置？")) {
-        var base_config = $('#form_base_config').serializeObject()
-        var ssl_config = $('#form_ssl_config').serializeObject()
-        var upstream_list = []
-        $('#div_upstream_list form').each(function() {
-            upstream_list.push($(this).serializeObject())
-        })
-        var post = {
-            'base_config': base_config,
-            'ssl_config': ssl_config,
-            'upstream_list': upstream_list
-        }
-
-        jQuery.ajax({
-            type: 'post',
-            url: '/proxy/save/',
-            data: JSON.stringify(post),
-            dataType: 'json',
-            success: function(p) {
-                if (p.flag == "Success") {
-                    alert("保存成功!")
-                    top.location = '/proxy/'
-                } else if (p.flag == "Error" && p.context == "ArgsError") {
-                    alert('保存失败！配置项填写错误！')
-                } else if (p.flag == "Error" && p.context == "NicError") {
-                    alert('保存失败！内网网卡选择错误！')
-                } else if (p.flag == "Error" && p.context == "AuthFailed") {
-                    alert('认证失败！请重新登录！')
-                    top.location = '/login/'
-                } else {
-                    alert('保存错误！其他错误：' + p.context)
-                }
-            },
-            error: function(e) {
-                alert('请求失败!')
-            }
-        })
+        return cert_info
     }
 
-}
 </script>
 {% endblock %}

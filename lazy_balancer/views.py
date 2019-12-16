@@ -7,7 +7,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout,login
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils import timezone
-from nginx.ip import *
 import json
 
 def login_view(request):
@@ -22,7 +21,6 @@ def login_view(request):
             return HttpResponseRedirect(redirect_to)
 
     else:
-        set_firewall()
         if request.GET.has_key('next'):
             redirect_to = request.GET['next']
 

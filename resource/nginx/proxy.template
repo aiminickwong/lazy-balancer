@@ -1,25 +1,61 @@
+
+{%- if not proxy.to_domain_toggle %}
 upstream {{ proxy.config_id | lower }} {
     {%- if proxy.balancer_type == "ip_hash" %}
-    ip_hash;
+    hash $remote_addr consistent;
     {%- endif %}
-    {%- if proxy.check_type == "tcp" %}
-      {%- for server in upstream %}
-      server {{ server.address }}:{{ server.port }} weight={{ server.weight }} max_fails={{ server.max_fails }} fail_timeout={{ server.fail_timeout }}s;
-      {%- endfor %}
+    {%- for server in upstream %}
+    {%- if proxy.protocol %}
+    server {{ server.address }}:{{ server.port }} weight={{ server.weight }};
     {%- else %}
-      {%- for server in upstream %}
-      server {{ server.address }}:{{ server.port }} weight={{ server.weight }};
-      {%- endfor %}
-      check interval=3000 rise=2 fall=5 timeout=1000 type=http;
-      check_http_expect_alive http_2xx http_3xx;
-      check_keepalive_requests 100;
-      check_http_send "HEAD / HTTP/1.1\r\nConnection: keep-alive\r\nHost: {{ proxy.host }}\r\n\r\n";
+    server {{ server.address }}:{{ server.port }} weight={{ server.weight }} max_fails={{ proxy.max_fails }} fail_timeout={{ proxy.fail_timeout }}s;
+    {%- endif %}
+    {%- endfor %}
+    {%- if proxy.protocol %}
+    {%- if proxy.http_check %}
+    {%- if proxy.backend_protocol == 'https' %}
+    check interval=3000 rise=2 fall={{ proxy.max_fails }} timeout={{ proxy.fail_timeout * 1000 }} type=ssl_hello;
+    check_keepalive_requests 100;
+    {%- else %}
+    check interval=3000 rise=2 fall={{ proxy.max_fails }} timeout={{ proxy.fail_timeout * 1000 }} type=http;
+    check_http_expect_alive http_2xx http_3xx;
+    check_keepalive_requests 100;
+    check_http_send "HEAD / HTTP/1.1\r\nConnection: keep-alive\r\nHost: {{ proxy.host }}\r\n\r\n";
+    {%- endif %}
+    {%- else %}
+    check interval=3000 rise=2 fall={{ proxy.max_fails }} timeout={{ proxy.fail_timeout * 1000 }} type=tcp;
+    check_keepalive_requests 100;
+    {%- endif %}
     {%- endif %}
 }
+{%- endif %}
 
-{%- if not proxy.protocols %}
+{%- if proxy.protocol %}
+{%- if proxy.ssl %}
+
+{%- if proxy.ssl_redirect_https %}
+# HTTP redirect
 server {
-    listen {{ proxy.listen }};
+	listen 80;
+
+	server_name {{ proxy.server_name }};
+
+	location / {
+        {%- if proxy.listen == 443 %}
+		return 301 https://{{ proxy.server_name }}$request_uri;
+        {%- else %}
+		return 301 https://{{ proxy.server_name }}:{{ proxy.listen }}$request_uri;
+        {%- endif %}
+	}
+}
+{%- endif %}
+
+server {
+    {%- if proxy.ssl_http2 %}
+    listen {{ proxy.listen }} ssl http2;
+    {%- else %}
+    listen {{ proxy.listen }} ssl;
+    {%- endif %}
     server_name {{ proxy.server_name }};
 
     {%- if proxy.error_log %}
@@ -31,33 +67,6 @@ server {
 
     root /usr/share/nginx/html;
 
-    location / {
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_pass http://{{ proxy.config_id | lower }}/;
-        proxy_http_version 1.1;
-        proxy_set_header Connection "";
-        proxy_buffering off;
-    }
-
-    #set $limit 1;
-    req_status server;
-}
-{%- else %}
-server {
-    listen {{ proxy.listen }};
-    server_name {{ proxy.server_name }};
-
-    {%- if proxy.error_log %}
-    error_log {{ proxy.error_log }};
-    {%- endif %}
-    {%- if proxy.access_log %}
-    access_log {{ proxy.access_log }};
-    {%- endif %}
-
-    root /usr/share/nginx/html;
-
-    ssl on;
     ssl_certificate {{ proxy.ssl_cert_path }};
     ssl_certificate_key {{ proxy.ssl_key_path }};
 
@@ -68,18 +77,89 @@ server {
 
     # ssl_protocols ;
     # ssl_ciphers ;
-    ssl_prefer_server_ciphers on;
+    # ssl_prefer_server_ciphers on;
+
+{%- else %}
+
+server {
+    listen {{ proxy.listen }};
+    server_name {{ proxy.server_name }};
+
+    {%- if proxy.error_log %}
+    error_log {{ proxy.error_log }};
+    {%- endif %}
+    {%- if proxy.access_log %}
+    access_log {{ proxy.access_log }};
+    {%- endif %}
+
+    root /usr/share/nginx/html;
+
+{%- endif %}
 
     location / {
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_pass http://{{ proxy.config_id | lower }}/;
-        proxy_http_version 1.1;
-        proxy_set_header Connection "";
-        proxy_buffering off;
+        {%- if proxy.to_domain_toggle %}
+        proxy_pass {{ proxy.to_domain }};
+
+        proxy_http_version	1.1;
+        proxy_cache_bypass	$http_upgrade;
+
+        proxy_set_header Upgrade			$http_upgrade;
+        proxy_set_header Connection 		"upgrade";
+        proxy_set_header Host				"{{ proxy.host }}";
+        proxy_set_header X-Real-IP			$remote_addr;
+        proxy_set_header X-Forwarded-For	$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto	$scheme;
+        proxy_set_header X-Forwarded-Host	"{{ proxy.host }}";
+        proxy_set_header X-Forwarded-Port	$server_port;
+        {%- else %}
+        proxy_pass {{ proxy.backend_protocol }}://{{ proxy.config_id | lower }}/;
+
+        proxy_http_version	1.1;
+        proxy_cache_bypass	$http_upgrade;
+
+        proxy_set_header Upgrade			$http_upgrade;
+        proxy_set_header Connection 		"upgrade";
+        {%- if proxy.backend_domain_toggle %}
+        proxy_set_header Host				"{{ proxy.backend_domain }}"; 
+        proxy_set_header X-Forwarded-Host	"{{ proxy.backend_domain }}"; 
+        {%- else %}
+        proxy_set_header Host				$host; 
+        proxy_set_header X-Forwarded-Host	$host; 
+        {%- endif %}
+        proxy_set_header X-Forwarded-For	$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto	$scheme;
+        proxy_set_header X-Forwarded-Port	$server_port;
+        proxy_set_header X-Real-IP			$remote_addr;
+        {%- endif %}
     }
+
+    {%- if proxy.gzip %}
+
+    # gzip
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_types text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml;
+    {%- endif %}
 
     #set $limit 1;
     req_status server;
+
+{{ proxy.custom_config }}
+
+}
+
+{%- else %}
+
+server {
+    listen {{ proxy.listen }};
+    proxy_connect_timeout 5s;
+    proxy_timeout 30s;
+    proxy_pass {{ proxy.config_id | lower }};
+    {%- if proxy.access_log %}
+    access_log {{ proxy.access_log }} proxy;
+    {%- endif %}
 }
 {%- endif %}
+

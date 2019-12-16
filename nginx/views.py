@@ -36,10 +36,10 @@ def build_proxy_config(config):
 
     return template.render(config)
 
-def build_default_config(config):
-    template = load_template('default.template')
-
-    return template.render(config)
+#def build_default_config(config):
+#    template = load_template('default.template')
+#
+#    return template.render(config)
 
 def write_config(conf_path,conf_context):
     f = open(conf_path, 'w')
@@ -57,33 +57,46 @@ def run_shell(cmd):
 def test_config():
     return run_shell('nginx -t')
 
-def reload_config():
-    config_nginx_path = "/etc/nginx/nginx.conf"
-    config_default_path = "/etc/nginx/conf.d/default.conf"
-    os.remove(config_nginx_path)
-    clean_dir("/etc/nginx/conf.d")
-    m_config = main_config.objects.all()[0].__dict__
-    write_config(config_nginx_path,build_main_config(m_config))
+def reload_config(scope="main"):
+    if scope == "main":
+        config_nginx_path = "/etc/nginx/nginx.conf"
+        # config_default_path = "/etc/nginx/conf.d/default.conf"
+        # os.remove(config_nginx_path)
+        m_config = main_config.objects.all()[0].__dict__
+        write_config(config_nginx_path,build_main_config(m_config))
 
-    proxy_port_list = []
-    proxy_config_list = proxy_config.objects.filter(status=True)
-    for p in proxy_config_list:
-        u_list = []
-        for u in p.upstream_list.all():
-            u_list.append(u.__dict__)
-            pass
-        p_config = { 'proxy' : p.__dict__ , 'upstream' : u_list }
-        config_proxy_path = "/etc/nginx/conf.d/%s.conf" % p.config_id
-        if p.protocols:
-            write_config(p.ssl_cert_path,p.ssl_cert)
-            write_config(p.ssl_key_path,p.ssl_key)
-        pass
-        proxy_port_list.append(p.listen)
-        write_config(config_proxy_path,build_proxy_config(p_config))
+        test_ret = test_config()
+        if test_ret['status'] != 0:
+            print(test_ret['output'])
+            return False
+        run_shell('nginx -s reload')
 
-    write_config(config_default_path,build_default_config({'listen_list':list(set(proxy_port_list))}))
+    elif scope == "proxy":
+        clean_dir("/etc/nginx/conf.d")
+        proxy_port_list = []
+        proxy_config_list = proxy_config.objects.filter(status=True).iterator()
+        for p in proxy_config_list:
+            u_list = []
+            for u in p.upstream_list.all().iterator():
+                u_list.append(u.__dict__)
+            p_config = { 'proxy' : p.__dict__ , 'upstream' : u_list }
+            if p.protocol:
+                config_proxy_path = "/etc/nginx/conf.d/%s-http.conf" % p.config_id
+                proxy_port_list.append(p.listen)
+            else:
+                config_proxy_path = "/etc/nginx/conf.d/%s-tcp.conf" % p.config_id
+            if p.ssl:
+                write_config(p.ssl_cert_path,p.ssl_cert)
+                write_config(p.ssl_key_path,p.ssl_key)
+            write_config(config_proxy_path,build_proxy_config(p_config))
 
-    return run_shell('nginx -s reload')
+        test_ret = test_config()
+        if test_ret['status'] != 0:
+            print(test_ret['output'])
+            return False
+        run_shell('nginx -s reload')
+
+    return True
 
 def get_sys_status():
     phymem = psutil.virtual_memory()
@@ -151,15 +164,16 @@ def get_sys_info():
         if ":" not in addrs[0].address:
             if nic != "lo":
                 nic_info.append({'nic':nic,'address':addrs[0].address})
+    uname = platform.uname()
     sysinfo = {
         'nic' : nic_info,
         'platform' : {
-            'node' : platform.node(),
-            'system' : platform.system(),
-            'release' : platform.release(),
-            'processor' : platform.processor()
+            'node' : uname[1],
+            'system' : uname[0],
+            'release' : uname[2],
+            'processor' : uname[4]
         },
-        'nginx' : run_shell('nginx -v')['output'].split(': ')[1]
+        'nginx' : run_shell('nginx -v')['output'].replace('\nnginx version: ','(').split(':')[1].strip() + ")"
     }
     return sysinfo
 

@@ -25,8 +25,7 @@ SECRET_KEY = '3k%d0_iyfg+nut5(f53#c_30l3p$4otxfy97#((3)6po*(m4yx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -37,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_apscheduler',
     'customfilter',
     'settings',
     'nginx',
@@ -84,7 +84,10 @@ WSGI_APPLICATION = 'lazy_balancer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR + '/db', 'db.sqlite3'),
+    },
+    'OPTIONS': {
+        'timeout': 20,
     }
 }
 
@@ -131,3 +134,28 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '[%(asctime)s][%(levelname)s][%(funcName)s %(module)s]: %(message)s'
+        },
+        'simple': {
+            'format': '[%(asctime)s][%(levelname)s]: %(message)s'
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
